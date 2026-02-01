@@ -39,83 +39,51 @@ function draw() {
 
       //fill(val, 100, 100, 1);
 
-    fill(120, 100, 80)
-      noStroke();
 
-      
-colorMode(RGB, 255);
-
+      colorMode(RGB, 255);
 let r = red(c);
 let g = green(c);
 let b = blue(c);
 
+// Make a color object
+let pixCol = color(r, g, b);
+
+// Switch to HSB to use for fill
+colorMode(HSB, 360, 100, 100, 1);
+let h = hue(pixCol);
+let s = saturation(pixCol);
+let bVal = brightness(pixCol);
+
+// Then use these for fill
+fill(h, s, bVal);
+
+      
+      noStroke();
+
+
+
+
 colorMode(HSB, 360, 100, 100, 1);
 
+    let brit = int(0.2126*red(c) + 0.7152*green(c) + 0.0722*blue(c));
+    brit = map(brit, 0, 255, 0, 100);
 
-let brit = int(0.2126*r + 0.7152*g + 0.0722*b); // 0–255
-brit = map(brit, 0, 255, 0, 100);
-
-
-            
-           if (brit <= 15) {
-        updateText(' ', x, y);
-           }
-      
-           else if (brit <= 20) {
-        updateText('.', x, y);
-           }
-      
-      
-      else if  (brit <= 30) {
-        updateText(':', x, y);
-           }
-      
-      else if (brit <= 40) {
-        updateText('-', x, y);
-           }
-      
-      else if (brit <=45) {
-        updateText('|', x, y);
-           }
-      
-      else if (brit <= 50) {
-        updateText('=', x, y);
-
-      }
-      
-      else if (brit <= 60) {
-        updateText('+', x, y);
-
-      }
-      
-      else if (brit <= 62) {
-        updateText('%', x, y);
-
-      }
-      
-      else if (brit <= 64) {
-        updateText('O', x, y);
-
-      }
-      
-      else if (brit <= 68) {
-        updateText('#', x, y);
-      }
-    
-      
-      else if (brit >68) {
-        updateText('@', x, y);
-      
-    
-      }
-      
-
-
-
-
-    }
-
+    if (brit <= 15) updateText(' ', x, y);
+    else if (brit <= 20) updateText('.', x, y);
+    else if (brit <= 30) updateText(':', x, y);
+    else if (brit <= 40) updateText('-', x, y);
+    else if (brit <= 45) updateText('|', x, y);
+    else if (brit <= 50) updateText('=', x, y);
+    else if (brit <= 60) updateText('+', x, y);
+    else if (brit <= 62) updateText('%', x, y);
+    else if (brit <= 64) updateText('O', x, y);
+    else if (brit <= 68) updateText('#', x, y);
+    else updateText('@', x, y);
   }
+}
+      
+
+  
 
 }
 
