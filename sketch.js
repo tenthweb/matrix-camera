@@ -1,99 +1,67 @@
-let img;
-let cap;
-
-function preload() {
-  img = createCapture(VIDEO);
-  img.size(1000, 1000);
-  img.position(750, 0);
-  img.hide();
-
-}
-
+let cam;
+let started = false;
 
 function setup() {
-  
-  textAlign(LEFT, TOP);
-
-
   createCanvas(1000, 1000);
-  colorMode(HSB, 360, 100, 100, 1);;
-//  slider = createSlider(0, 360, 60, 40);
- // slider.position(10, 10);
- // slider.style('width', '80px');
+  textAlign(LEFT, TOP);
+  textSize(5);
+  colorMode(HSB, 360, 100, 100, 1);
+  background(0);
 
+  fill(0, 0, 100);
+  text("Click to start camera", 20, 20);
 }
 
-
-
-function draw() {
-
- // let val = slider.value();
- 
-  background(0, 0, 0, 1);
-  
-  let cap = img.get();
-  for (let x = 0; x < img.width; x += 6) {
-    for (let y = 0; y < img.height; y += 6) {
-      let c = img.get(x, y);
-
-
-      //fill(val, 100, 100, 1);
-
-
-      colorMode(RGB, 255);
-let r = red(c);
-let g = green(c);
-let b = blue(c);
-
-// Make a color object
-let pixCol = color(r, g, b);
-
-// Switch to HSB to use for fill
-colorMode(HSB, 360, 100, 100, 1);
-let h = hue(pixCol);
-let s = saturation(pixCol);
-let bVal = brightness(pixCol);
-
-// Then use these for fill
-fill(h, s, bVal);
-
-      
-      noStroke();
-
-
-
-
-colorMode(HSB, 360, 100, 100, 1);
-
-    let brit = int(0.2126*red(c) + 0.7152*green(c) + 0.0722*blue(c));
-    brit = map(brit, 0, 255, 0, 100);
-
-    if (brit <= 15) updateText(' ', x, y);
-    else if (brit <= 20) updateText('.', x, y);
-    else if (brit <= 30) updateText(':', x, y);
-    else if (brit <= 40) updateText('-', x, y);
-    else if (brit <= 45) updateText('|', x, y);
-    else if (brit <= 50) updateText('=', x, y);
-    else if (brit <= 60) updateText('+', x, y);
-    else if (brit <= 62) updateText('%', x, y);
-    else if (brit <= 64) updateText('O', x, y);
-    else if (brit <= 68) updateText('#', x, y);
-    else updateText('@', x, y);
+function mousePressed() {
+  if (!started) {
+    cam = createCapture(VIDEO);
+    cam.size(1000, 1000);
+    cam.hide();
+    started = true;
   }
 }
-      
 
+function draw() {
+  if (!started) return;
 
+  background(0);
 
+  cam.loadPixels();
 
-    
+  for (let x = 0; x < cam.width; x += 6) {
+    for (let y = 0; y < cam.height; y += 6) {
+      let c = cam.get(x, y);
 
-  
+      let r = red(c);
+      let g = green(c);
+      let b = blue(c);
 
-}
+      let pixCol = color(r, g, b);
 
+      colorMode(HSB, 360, 100, 100, 1);
+      let h = hue(pixCol);
+      let s = saturation(pixCol);
+      let br = brightness(pixCol);
 
-function updateText(word, a, b) {
-  textSize(5);
-  text(word, a, b);
+      fill(h, s, br);
+      noStroke();
+
+      let brit = 0.2126 * r + 0.7152 * g + 0.0722 * b;
+      brit = map(brit, 0, 255, 0, 100);
+
+      let ch = ' ';
+      if (brit > 15) ch = '.';
+      if (brit > 20) ch = ':';
+      if (brit > 30) ch = '-';
+      if (brit > 40) ch = '|';
+      if (brit > 50) ch = '=';
+      if (brit > 60) ch = '+';
+      if (brit > 62) ch = '%';
+      if (brit > 64) ch = 'O';
+      if (brit > 68) ch = '#';
+      if (brit > 75) ch = '@';
+
+      text(ch, x, y);
+    }
+  }
 }
