@@ -20,31 +20,29 @@ function mousePressed() {
     started = true;
   }
 }
-
 function draw() {
   if (!started) return;
 
-  background(0);
-
   cam.loadPixels();
+  if (cam.pixels.length === 0) return; // ← THIS is the missing line
+
+  background(0);
 
   for (let x = 0; x < cam.width; x += 6) {
     for (let y = 0; y < cam.height; y += 6) {
-      let c = cam.get(x, y);
+      let idx = 4 * (y * cam.width + x);
 
-      let r = red(c);
-      let g = green(c);
-      let b = blue(c);
+      let r = cam.pixels[idx];
+      let g = cam.pixels[idx + 1];
+      let b = cam.pixels[idx + 2];
 
       let pixCol = color(r, g, b);
 
-      colorMode(HSB, 360, 100, 100, 1);
       let h = hue(pixCol);
       let s = saturation(pixCol);
       let br = brightness(pixCol);
 
       fill(h, s, br);
-      noStroke();
 
       let brit = 0.2126 * r + 0.7152 * g + 0.0722 * b;
       brit = map(brit, 0, 255, 0, 100);
